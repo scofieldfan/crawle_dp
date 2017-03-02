@@ -1,0 +1,14 @@
+{
+  "name": "crawle_dp",
+  "version": "1.0.0",
+  "description": "抓取大众点评数据",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "fanzhang",
+  "license": "ISC",
+  "devDependencies": {
+    "crawler": "^1.0.3"
+  }
+}

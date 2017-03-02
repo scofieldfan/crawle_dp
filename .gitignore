@@ -1,0 +1,5 @@
+.idea/
+npm-debug.log
+publish.sh
+logs/*
+node_modules
