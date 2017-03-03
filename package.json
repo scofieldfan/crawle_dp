@@ -10,6 +10,7 @@
   "license": "ISC",
   "devDependencies": {
     "crawler": "^1.0.3",
-    "dateformat": "^2.0.0"
+    "dateformat": "^2.0.0",
+    "lodash": "^4.17.4"
   }
 }

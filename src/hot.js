@@ -5,7 +5,9 @@
 var File = require('./file');
 var Crawler = require("crawler");
 var dateFormat = require('dateformat');
+var _ = require('lodash');
 var cityObj = require('./city');
+
 var citys = cityObj.citys;
 var listCrawler = new Crawler({
     maxConnections: 5,
@@ -16,28 +18,74 @@ var listCrawler = new Crawler({
             console.error(error);
         } else {
             var paths = res.request.uri.pathname.split("/");
-            var type  = paths[paths.length-1];
+            var type = paths[paths.length - 1];
             var fileName = __dirname + `/../data/${type}.csv`;
             var data = JSON.parse(res.body).data;
             console.log("begin crawle...", res.request.uri.path);
-            if (data && data.rank && data.rank.list) {
-                var list = JSON.parse(data.rank.list);
-                var cityArray = cityObj.findCity(data.rank.req.provinceid, data.rank.req.cityid);
-                var outputArray = [
-                    cityArray[0],
-                    cityArray[1],
-                    data.rank.req.date
-                ]
-                if (list) {
-                    outputArray = outputArray.concat(list.map((item) => item.dimname));
+            var cityArray = cityObj.findCity(data.rank.req.provinceid, data.rank.req.cityid);
+            var outputArray = [
+                cityArray[0],
+                cityArray[1],
+                data.rank.req.date
+            ]
+            if (data) {
+                var result = [];
+                if (type === 'consumer') {
+                    result = consumerHandler(outputArray, data);
+                } else if (type === 'happiness') {
+                    result = happinessHandler(outputArray, data);
+                } else {
+                    result = commonHandler(outputArray, data);
                 }
-                File.appendFile(fileName, outputArray.join(",") + "\r\n");
+                File.appendFile(fileName, result.join(",") + "\r\n");
             }
         }
         done();
     }
 });
-var types = ['dish', 'consumer', 'popular', 'happiness','hot'];
+function happinessHandler(outputArray, data) {
+    let result = _.clone(outputArray);
+    let list = data.map && data.map.list && JSON.parse(data.map.list);
+    if (list) {
+        result = result.concat(list.map((item) => {
+            return item.cityname+","+item.atomvalue;
+        }));
+    }
+    return result;
+}
+function consumerHandler(outputArray, data) {
+    let result = _.clone(outputArray);
+    let list = data.map.list && JSON.parse(data.map.list);
+    if (list) {
+        result = result.concat(list.map((item) => {
+            let str = [];
+            if (item.provincename) {
+                str.push(item.provincename);
+            }
+            if (item.cityname) {
+                str.push(item.cityname);
+            }
+            if (item.atomvalue) {
+                str.push(item.atomvalue);
+            }
+            return str.join(",");
+        }));
+    }
+    return result;
+}
+function commonHandler(outputArray, data) {
+    let result = _.clone(outputArray);
+    let list = data.rank.list && JSON.parse(data.rank.list);
+    if (list) {
+        result = result.concat(list.map((item) => {
+            return item.dimname;
+        }));
+    }
+    return result;
+}
+//var types = ['dish', 'consumer', 'popular', 'hot'];
+//var types = [ 'happiness'];
+let types = [];
 types.forEach((type)=> {
     citys.forEach((item) => {
         for (var d = 0; d < 2; d++) {
@@ -56,4 +104,10 @@ types.forEach((type)=> {
 
 })
 
-
+for (var d = 0; d < 2; d++) {
+    var date = new Date();
+    date.setDate(date.getDate() - d);
+    var day = dateFormat(date, "yyyy-mm-dd");
+    var crawlerUrl = `http://m.dianping.com/datamap/newyearmapapi/food/happiness?date=${day}`;
+    listCrawler.queue(crawlerUrl);
+}
