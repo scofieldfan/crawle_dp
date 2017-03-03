@@ -3,5 +3,8 @@ files=`find ../data -name *.csv`
 echo $files
 for file in $files
 do
-	iconv -f 'utf8' -t 'gb18030' $file > $file.excel
+	filename=`echo $file|sed 's/\.\.\/data\///'`
+	echo $file
+	echo $filename
+	iconv -f 'utf8' -t 'gb18030' $file > ../output/$filename
 done
