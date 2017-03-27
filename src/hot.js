@@ -48,7 +48,7 @@ function happinessHandler(outputArray, data) {
     let list = data.map && data.map.list && JSON.parse(data.map.list);
     if (list) {
         result = result.concat(list.map((item) => {
-            return item.cityname+","+item.atomvalue;
+            return item.cityname+","+item.atomvaluet;
         }));
     }
     return result;
