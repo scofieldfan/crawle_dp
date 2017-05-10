@@ -15,9 +15,9 @@ var pool = mysql.createPool({
     database: 'dianping'
 });
 
-function  getDate() {
+function getDate() {
     let date = new Date();
-    return  date.getFullYear() + "-"+(date.getMonth()+1)+"-"+date.getDate();
+    return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 }
 var ouputFile = './data/output.csv';
 
@@ -37,7 +37,7 @@ var detailCrawler = new Crawler({
                 if (!window.shop_config) {
                     return;
                 }
-                var money = $("#avgPriceTitle").text().replace("￥", "").replace('人均：','').replace('元','');
+                var money = $("#avgPriceTitle").text().replace("￥", "").replace('人均：', '').replace('元', '');
                 var bread1 = $(".breadcrumb").find("a").eq(0).text().replace(/\n/g, '').trim();
                 ;
                 var bread2 = $(".breadcrumb").find("a").eq(1).text().replace(/\n/g, '').trim();
@@ -56,11 +56,11 @@ var detailCrawler = new Crawler({
                 var fuwuScore = $("#comment_score").find(".item").eq(2).text().replace("服务：", "").trim();
 
                 var object = {
-                    shopId:window.shop_config['shopId'],
+                    shopId: window.shop_config['shopId'],
                     url: url,
-                    dateStr:getDate(),
-                    shopName:window.shop_config['shopName'],
-                    money:money,
+                    dateStr: getDate(),
+                    shopName: window.shop_config['shopName'],
+                    money: money,
                     location: bread1.replace(/\n/g, '').trim(),
                     shangquan: bread2.replace(/\n/g, '').trim(),
                     type: bread3.replace(/\n/g, '').trim(),
@@ -72,47 +72,47 @@ var detailCrawler = new Crawler({
                     cityId: window.shop_config['cityId'],
                     cityCnName: window.shop_config['cityCnName'],
                     cityName: window.shop_config['cityName'],
-                    cityEnName:window.shop_config['cityEnName'],
+                    cityEnName: window.shop_config['cityEnName'],
                     isOverseasCity: window.shop_config['isOverseasCity'],
                     fullName: window.shop_config['fullName'],
-                    shopType:window.shop_config['shopType'],
-                    mainRegionId:window.shop_config['mainRegionId'],
-                    mainCategoryName:window.shop_config['mainCategoryName'],
-                    categoryURLName:window.shop_config['categoryURLName'],
+                    shopType: window.shop_config['shopType'],
+                    mainRegionId: window.shop_config['mainRegionId'],
+                    mainCategoryName: window.shop_config['mainCategoryName'],
+                    categoryURLName: window.shop_config['categoryURLName'],
                     shopGroupId: window.shop_config['shopGroupId'],
                     categoryName: window.shop_config['categoryName']
                 };
                 //object = Object.assign(object, window.shop_config);
 
                 /*
-                var output = [];
-                output.push(object["shopId"]);
-                output.push(object["url"]);
-                output.push(object["shopName"]);
-                output.push(object["money"]);
-                output.push(object["location"]);
-                output.push(object["shangquan"]);
-                output.push(object["type"]);
-                output.push(object["address"]);
-                output.push(object["tel"]);
-                output.push(object["stars"]);
-                output.push(object["kouweiScore"]);
-                output.push(object["huanjingScore"]);
-                output.push(object["fuwuScore"]);
-                */
+                 var output = [];
+                 output.push(object["shopId"]);
+                 output.push(object["url"]);
+                 output.push(object["shopName"]);
+                 output.push(object["money"]);
+                 output.push(object["location"]);
+                 output.push(object["shangquan"]);
+                 output.push(object["type"]);
+                 output.push(object["address"]);
+                 output.push(object["tel"]);
+                 output.push(object["stars"]);
+                 output.push(object["kouweiScore"]);
+                 output.push(object["huanjingScore"]);
+                 output.push(object["fuwuScore"]);
+                 */
                 console.log("beigin crawle 详情 url:", object["dir"], url);
                 console.log("...........");
 
                 /*
-                var query = pool.query('REPLACE INTO  dp_hotels SET ?', object, function (error, results, fields) {
-                    if (error) throw error;
-                    // Neat!
-                    console.log('ok..........');
-                });
-                console.log(query);
-                */
+                 var query = pool.query('REPLACE INTO  dp_hotels SET ?', object, function (error, results, fields) {
+                 if (error) throw error;
+                 // Neat!
+                 console.log('ok..........');
+                 });
+                 console.log(query);
+                 */
 
-                pool.getConnection(function(err, connection) {
+                pool.getConnection(function (err, connection) {
                     // pool the connections
                     console.log('get connection.');
                     connection.query('REPLACE INTO  dp_hotels SET ?', object, function (error, results, fields) {
@@ -131,7 +131,7 @@ var detailCrawler = new Crawler({
         }
     }
 });
-detailCrawler.on('drain',function(){
+detailCrawler.on('drain', function () {
     // For example, release a connection to database.
     console.log('ondrain......');
     pool.end(function (err) {
@@ -166,21 +166,19 @@ var listCrawler = new Crawler({
         done();
     }
 });
-/*
- var preUrl = 'http://www.dianping.com/search/category';
- function init() {
- for (var city = 0; city < 600; city++)
- for (var page = 0; page < 50; page++) {
- var path = '';
- if (page > 0) {
- path = "/" + city + '/10/p' + (page + 1);
- } else {
- path = "/" + city + '/10/';
- }
- console.log("queue:", path);
- listCrawler.queue(preUrl + path);
- }
- }
- init();
- */
-detailCrawler.queue('http://www.dianping.com/shop/6429674');
+var preUrl = 'http://www.dianping.com/search/category';
+function init() {
+    for (var city = 0; city < 600; city++)
+        for (var page = 0; page < 50; page++) {
+            var path = '';
+            if (page > 0) {
+                path = "/" + city + '/10/p' + (page + 1);
+            } else {
+                path = "/" + city + '/10/';
+            }
+            console.log("queue:", path);
+            listCrawler.queue(preUrl + path);
+        }
+}
+init();
+//detailCrawler.queue('http://www.dianping.com/shop/6429674');
