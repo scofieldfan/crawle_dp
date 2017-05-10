@@ -19,10 +19,11 @@ var detailCrawler = new Crawler({
             var $ = res.$;
             if ($) {
                 var url = res.request.uri.path;
-
+                var window = {};
+                var script  = eval($("script").eq(5).html());
+                console.log(window.shop_config);
                 var id = url.replace('/shop/', '').trim();
                 var money = $("#avgPriceTitle").text().replace("￥", "");
-                ;
                 var bread1 = $(".breadcrumb").find("a").eq(0).text();
                 var bread2 = $(".breadcrumb").find("a").eq(1).text();
                 var bread3 = $(".breadcrumb").find("a").eq(2).text();
@@ -38,6 +39,9 @@ var detailCrawler = new Crawler({
                 var fuwuScore = $("#comment_score").find(".item").eq(2).text().replace("服务：", "").trim();
 
                 var object = map[id];
+                if(!object){
+                    return '.';
+                }
                 object["location"] = bread1.replace(/\n/g, '').trim();
                 object["shangquan"] = bread2.replace(/\n/g, '').trim();
                 object["type"] = bread3.replace(/\n/g, '').trim();
@@ -112,7 +116,7 @@ var listCrawler = new Crawler({
         done();
     }
 });
-
+/*
 var preUrl = 'http://www.dianping.com/search/category';
 var detailSet = new Set(File.readFile('./data/detailIds.csv').split(","));
 console.log("detailSet", detailSet);
@@ -130,3 +134,6 @@ function init() {
         }
 }
 init();
+*/
+
+detailCrawler.queue("http://www.dianping.com/shop/510993");
