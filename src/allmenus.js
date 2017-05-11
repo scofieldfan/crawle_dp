@@ -19,7 +19,6 @@ function getDate() {
     let date = new Date();
     return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate();
 }
-var ouputFile = './data/output.csv';
 
 var detailCrawler = new Crawler({
     maxConnections: 5,

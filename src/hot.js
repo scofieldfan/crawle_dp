@@ -8,6 +8,8 @@ var dateFormat = require('dateformat');
 var _ = require('lodash');
 var cityObj = require('./city');
 
+var today = dateFormat(new Date(), "yyyymmdd");
+
 var citys = cityObj.citys;
 var listCrawler = new Crawler({
     maxConnections: 5,
@@ -19,7 +21,7 @@ var listCrawler = new Crawler({
         } else {
             var paths = res.request.uri.pathname.split("/");
             var type = paths[paths.length - 1];
-            var fileName = __dirname + `/../data/${type}.csv`;
+            var fileName = __dirname + `/../data/hot/${type}_${today}.csv`;
             var data = JSON.parse(res.body).data;
             console.log("begin crawle...", res.request.uri.path);
             var cityArray = cityObj.findCity(data.rank.req.provinceid, data.rank.req.cityid);
@@ -83,14 +85,10 @@ function commonHandler(outputArray, data) {
     }
     return result;
 }
-//var types = ['dish', 'consumer', 'popular', 'hot'];
-//var types = [ 'happiness'];
-let types = [];
+var types = ['dish', 'consumer', 'popular', 'hot','happiness'];
 types.forEach((type)=> {
     citys.forEach((item) => {
-        for (var d = 0; d < 2; d++) {
             var date = new Date();
-            date.setDate(date.getDate() - d);
             var day = dateFormat(date, "yyyy-mm-dd");
             var crawlerUrl = `http://m.dianping.com/datamap/newyearmapapi/food/${type}?date=${day}&provinceid=${item.pId}`;
             listCrawler.queue(crawlerUrl);
@@ -99,11 +97,10 @@ types.forEach((type)=> {
                 var url = `http://m.dianping.com/datamap/newyearmapapi/food/${type}?date=${day}&provinceid=${item.pId}&cityid=${cId}`;
                 listCrawler.queue(url);
             })
-        }
     });
 
 })
-
+/*
 for (var d = 0; d < 2; d++) {
     var date = new Date();
     date.setDate(date.getDate() - d);
@@ -111,3 +108,4 @@ for (var d = 0; d < 2; d++) {
     var crawlerUrl = `http://m.dianping.com/datamap/newyearmapapi/food/happiness?date=${day}`;
     listCrawler.queue(crawlerUrl);
 }
+*/
