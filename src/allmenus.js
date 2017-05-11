@@ -8,10 +8,10 @@ var Crawler = require("crawler");
 
 const mysql = require('mysql');
 var pool = mysql.createPool({
-    connectionLimit: 10,
+    connectionLimit: 5,
     host: 'localhost',
     user: 'root',
-    password: '123456',
+    password: 'sanqi888',
     database: 'dianping'
 });
 
@@ -113,6 +113,7 @@ var detailCrawler = new Crawler({
                  */
 
                 pool.getConnection(function (err, connection) {
+                        if (err) throw err;
                     // pool the connections
                     console.log('get connection.');
                     connection.query('REPLACE INTO  dp_hotels SET ?', object, function (error, results, fields) {
@@ -131,13 +132,19 @@ var detailCrawler = new Crawler({
         }
     }
 });
-detailCrawler.on('drain', function () {
-    // For example, release a connection to database.
-    console.log('ondrain......');
-    pool.end(function (err) {
-        // all connections in the pool have ended
-    });
-});
+setInterval(function(){
+	console.log('list queue size:',listCrawler.queueSize);
+	console.log('detail queue size:',detailCrawler.queueSize);
+	if(listCrawler.queueSize == 0 && detailCrawler.queueSize ==  0){
+		detailCrawler.on('drain', function () {
+		    // For example, release a connection to database.
+		    console.log('ondrain......');
+		    pool.end(function (err) {
+			// all connections in the pool have ended
+		    });
+		});
+        	} 
+	},10000);
 var listCrawler = new Crawler({
     maxConnections: 5,
     rateLimit: 2000,
@@ -168,8 +175,8 @@ var listCrawler = new Crawler({
 });
 var preUrl = 'http://www.dianping.com/search/category';
 function init() {
-    for (var city = 0; city < 600; city++)
-        for (var page = 0; page < 50; page++) {
+    for (var city = 100; city < 600; city++)
+        for (var page = 0; page < 10; page++) {
             var path = '';
             if (page > 0) {
                 path = "/" + city + '/10/p' + (page + 1);

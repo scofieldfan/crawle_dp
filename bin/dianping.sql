@@ -1,6 +1,6 @@
-
+drop  database dianping;
 CREATE DATABASE dianping;
-
+use dianping;
 CREATE TABLE `dp_hotels` (
   `shopId` varchar(200) NOT NULL DEFAULT '0',
   `dateStr` varchar(50) NOT NULL DEFAULT '',
@@ -32,7 +32,7 @@ CREATE TABLE `dp_hotels` (
   `shopGroupId`  varchar(200) ,
   `categoryName`  varchar(200) ,
   `createTime` datetime DEFAULT NULL COMMENT '创建时间',
-  `updateTime` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '修改时间',
+  `updateTime` datetime DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`shopId`,`dateStr`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
