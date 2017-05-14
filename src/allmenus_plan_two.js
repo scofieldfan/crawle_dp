@@ -32,6 +32,7 @@ var detailCrawler = new Crawler({
                 }catch(error){
                     console.log('shop_config:' + window.shop_config);
                 }
+                console.log('url:' + url);
                 //console.log('shop_config:' +$("script").eq(7).html());
                 if (window.shop_config) {
                     var money = $("#avgPriceTitle").text().replace("￥", "").replace('人均：', '').replace('元', '');
