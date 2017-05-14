@@ -1,4 +1,5 @@
 var idFile = './data/ids.txt';
+var errorids = './data/errorids.txt';
 var File = require('./file');
 var DATETOOL = require('./date');
 var Crawler = require("crawler");
@@ -26,10 +27,13 @@ var detailCrawler = new Crawler({
             if ($) {
                 var url = res.request.uri.path;
                 var window = {};
-                var script = eval($("script").eq(7).html());
+                try{
+                    var script = eval($("script").eq(7).html());
+                }catch(error){
+                    console.log('shop_config:' + window.shop_config);
+                }
                 //console.log('shop_config:' +$("script").eq(7).html());
-                console.log('shop_config:' + window.shop_config);
-                if (window.shop_config != undefined) {
+                if (window.shop_config) {
                     var money = $("#avgPriceTitle").text().replace("￥", "").replace('人均：', '').replace('元', '');
                     var bread1 = $(".breadcrumb").find("a").eq(0).text().replace(/\n/g, '').trim();
                     ;
