@@ -28,7 +28,10 @@ var detailCrawler = new Crawler({
                 var url = res.request.uri.path;
                 var window = {};
                 try{
-                    var script = eval($("script").eq(7).html());
+                    var scriptHtml = $("script").eq(7).html();
+                    if(scriptHtml && scriptHtml.indexOf("shop_config")>=0){
+                        var script = eval(script);
+                    }
                 }catch(error){
                     console.log('shop_config:' + window.shop_config);
                 }
@@ -124,6 +127,8 @@ var detailCrawler = new Crawler({
                     })
 
 
+                }else{
+                    File.appendFile(errorids, url+ "\r\n");
                 }
             }
         }
@@ -147,6 +152,7 @@ const getReviewUrl = (reviewUrl) => {
     });
 }
 let prefix = 'http://www.dianping.com/shop/';
+/*
 let ids = getInput();
 ids.forEach((id) => {
     if (id) {
@@ -155,6 +161,8 @@ ids.forEach((id) => {
         detailCrawler.queue(url);
     }
 })
+*/
+detailCrawler.queue(prefix +'2998924');
 
 
 
