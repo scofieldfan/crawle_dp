@@ -30,12 +30,13 @@ var detailCrawler = new Crawler({
                 try{
                     var scriptHtml = $("script").eq(7).html();
                     if(scriptHtml && scriptHtml.indexOf("shop_config")>=0){
-                        var script = eval(script);
+                        var script = eval(scriptHtml);
                     }
                 }catch(error){
                     console.log('shop_config:' + window.shop_config);
                 }
                 console.log('url:' + url);
+                console.log(window.shop_config);
                 //console.log('shop_config:' +$("script").eq(7).html());
                 if (window.shop_config) {
                     var money = $("#avgPriceTitle").text().replace("￥", "").replace('人均：', '').replace('元', '');
