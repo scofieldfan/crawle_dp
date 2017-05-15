@@ -152,7 +152,6 @@ const getReviewUrl = (reviewUrl) => {
     });
 }
 let prefix = 'http://www.dianping.com/shop/';
-/*
 let ids = getInput();
 ids.forEach((id) => {
     if (id) {
@@ -161,8 +160,7 @@ ids.forEach((id) => {
         detailCrawler.queue(url);
     }
 })
-*/
-detailCrawler.queue(prefix +'2998924');
+//detailCrawler.queue(prefix +'2998924');
 
 
 
