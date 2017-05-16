@@ -1,5 +1,5 @@
-var idFile =  __dirname +'./data/ids.txt';
-var errorids =  __dirname +'./data/errorids.txt';
+var idFile =  __dirname +'/../data/ids.txt';
+var errorids =  __dirname +'/../data/errorids.txt';
 var File = require('./file');
 var DATETOOL = require('./date');
 var Crawler = require("crawler");
@@ -13,7 +13,7 @@ function getDate() {
     return DATETOOL.formateDate();
 }
 
-const outputFile =  __dirname +'./data/all/all-'+getDate()+".csv";
+const outputFile =  __dirname +'/../data/all/all-'+getDate()+".csv";
 var detailCrawler = new Crawler({
     maxConnections: 5,
     rateLimit: 2000,
