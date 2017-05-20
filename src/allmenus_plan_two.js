@@ -121,10 +121,14 @@ var detailCrawler = new Crawler({
                         output.push(res.body["reviewCountStar3"]);
                         output.push(res.body["reviewCountStar4"]);
                         output.push(res.body["reviewCountStar5"]);
-                        let summary = res.body['summarys'].map((item)=>{
-                            return item.summaryString+"("+item.summaryCount+")";
-                        }).join(" ")
-                        output.push(summary);
+                        if(res.body['summarys']){
+                            
+                            let summary = res.body['summarys'].map((item)=>{
+                                return item.summaryString+"("+item.summaryCount+")";
+                            }).join(" ")
+                            output.push(summary);
+                        }
+
                         console.log("beigin crawle 详情 url:", object["dir"], url);
                         console.log("...........");
                         console.log(output.join(","));
