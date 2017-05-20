@@ -115,14 +115,16 @@ var detailCrawler = new Crawler({
                         output.push(object["kouweiScore"]);
                         output.push(object["huanjingScore"]);
                         output.push(object["fuwuScore"]);
-                        output.push(res.body['dishTagStrList'].join(" "));
+                        if(res.body['dishTagStrList']){
+                            output.push(res.body['dishTagStrList'].join(" "));
+                        }
                         output.push(res.body["reviewCountStar1"]);
                         output.push(res.body["reviewCountStar2"]);
                         output.push(res.body["reviewCountStar3"]);
                         output.push(res.body["reviewCountStar4"]);
                         output.push(res.body["reviewCountStar5"]);
                         if(res.body['summarys']){
-                            
+
                             let summary = res.body['summarys'].map((item)=>{
                                 return item.summaryString+"("+item.summaryCount+")";
                             }).join(" ")
