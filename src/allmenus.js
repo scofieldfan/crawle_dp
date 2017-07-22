@@ -174,8 +174,8 @@ var listCrawler = new Crawler({
 });
 var preUrl = 'http://www.dianping.com/search/category';
 function init() {
-    for (var city = 100; city < 600; city++)
-        for (var page = 0; page < 10; page++) {
+    for (var city = 0; city < 100; city++)
+        for (var page = 0; page < 50; page++) {
             var path = '';
             if (page > 0) {
                 path = "/" + city + '/10/p' + (page + 1);

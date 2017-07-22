@@ -4,7 +4,7 @@ var File = require('./file');
 var DATETOOL = require('./date');
 var Crawler = require("crawler");
 const superagent = require('superagent');
-
+require('superagent-proxy')(superagent);
 function getInput() {
     return File.readFile(idFile).split('\n');
 }
@@ -28,10 +28,16 @@ var detailCrawler = new Crawler({
                 var url = res.request.uri.path;
                 var window = {};
                 try{
-                    var scriptHtml = $("script").eq(7).html();
-                    if(scriptHtml && scriptHtml.indexOf("shop_config")>=0){
-                        var script = eval(scriptHtml);
+                    //console.log($("script").eq(8).html());
+                    for(var numberI = 5 ;numberI<15; numberI++){
+			console.log($("script").eq(numberI).html());
+                        var scriptHtml = $("script").eq(numberI).html();
+			if(scriptHtml && scriptHtml.indexOf("shop_config")>=0){
+			  var script = eval(scriptHtml);
+			  break;
+			}
                     }
+                    
                 }catch(error){
                     console.log('shop_config:' + window.shop_config);
                 }
@@ -146,11 +152,19 @@ var detailCrawler = new Crawler({
         done();
     }
 });
+//var proxy = process.env.http_proxy || 'http://168.63.43.102:3128';
+var proxy = 'http://121.248.112.20:3128';
 const getReviewUrl = (reviewUrl) => {
+    console.log('reviewUrl:',reviewUrl);
     return new Promise((resolve, reject) => {
         superagent
         .get(reviewUrl)
-        .set('Accept', 'application/json')
+	.proxy(proxy)
+        .set({
+		'Content-Type': 'application/json',
+		'Accept': 'application/json',
+		'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/602.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
+		})
         .end(function (err, res) {
             if (err) {
                 throw err;
