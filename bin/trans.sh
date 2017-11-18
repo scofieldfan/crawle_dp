@@ -1,5 +1,5 @@
 
-files=`find ../data -name *.csv`
+files=`find ../data/ -name *.csv`
 echo $files
 for file in $files
 do
@@ -8,3 +8,4 @@ do
 	echo $filename
 	iconv -f 'utf8' -t 'gb18030' $file > ../output/$filename
 done
+tar -zcvf output.tar.gz ../output/

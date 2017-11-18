@@ -97,15 +97,7 @@ var detailCrawler = new Crawler({
                     //let reviewUrl =
                     // `http://www.dianping.com/ajax/json/shopDynamic/reviewAndStar?shopId=${object.shopId}&cityId=${object.cityId}&mainCategoryId=${object.mainCategoryId}`;
                     // object = Object.assign(object, window.shop_config);
-                    getReviewUrl(allreviewUrl).then((res) => {
-                        /*
-                        console.log(res.body['dishTagStrList']);
-                        console.log(res.body['reviewCountStar1']);
-                        console.log(res.body['reviewCountStar2']);
-                        console.log(res.body['reviewCountStar3']);
-                        console.log(res.body['reviewCountStar4']);
-                        console.log(res.body['reviewCountStar5']);
-                        */
+                    //getReviewUrl(allreviewUrl).then((res) => {
                         console.log('output.................');
                         var output = [];
                         output.push(object["shopId"]);
@@ -121,6 +113,8 @@ var detailCrawler = new Crawler({
                         output.push(object["kouweiScore"]);
                         output.push(object["huanjingScore"]);
                         output.push(object["fuwuScore"]);
+
+			/*
                         if(res.body['dishTagStrList']){
                             output.push(res.body['dishTagStrList'].join(" "));
                         }
@@ -136,12 +130,13 @@ var detailCrawler = new Crawler({
                             }).join(" ")
                             output.push(summary);
                         }
+			*/
 
                         console.log("beigin crawle 详情 url:", object["dir"], url);
                         console.log("...........");
                         console.log(output.join(","));
                         File.appendFile(outputFile, output.join(",") + "\r\n");
-                    })
+                    //})
 
 
                 }else{
@@ -153,20 +148,26 @@ var detailCrawler = new Crawler({
     }
 });
 //var proxy = process.env.http_proxy || 'http://168.63.43.102:3128';
-var proxy = 'http://121.248.112.20:3128';
+var proxy = 'http://111.62.251.27:80';
+var header = {
+    'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+    'Accept-Language': 'zh-CN,zh;q=0.8,zh-TW;q=0.6',
+    'Host': 'www.dianping.com',
+    'User-Agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Mobile Safari/537.36',
+    'Cache-Control': 'max-age=0',
+    'Connection': 'keep-alive'
+};
+
 const getReviewUrl = (reviewUrl) => {
     console.log('reviewUrl:',reviewUrl);
     return new Promise((resolve, reject) => {
         superagent
         .get(reviewUrl)
+        .set(header)
 	.proxy(proxy)
-        .set({
-		'Content-Type': 'application/json',
-		'Accept': 'application/json',
-		'User-Agent' : 'Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/602.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1'
-		})
         .end(function (err, res) {
             if (err) {
+		console.log(err);
                 throw err;
                 reject();
             } else {

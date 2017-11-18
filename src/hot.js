@@ -13,7 +13,8 @@ var today = dateFormat(new Date(), "yyyymmdd");
 var citys = cityObj.citys;
 var listCrawler = new Crawler({
     maxConnections: 5,
-    rateLimit: 1000,
+    rateLimit: 2000,
+    proxy:'http://111.62.251.70:8088',
     userAgent: 'Mozilla/5.0 (Windows; U; Windows NT 5.2) AppleWebKit/525.13 (KHTML, like Gecko) Version/3.1 Safari/525.13',
     callback: function (error, res, done) {
         if (error) {
@@ -91,6 +92,7 @@ types.forEach((type)=> {
             var date = new Date();
             var day = dateFormat(date, "yyyy-mm-dd");
             var crawlerUrl = `http://m.dianping.com/datamap/newyearmapapi/food/${type}?date=${day}&provinceid=${item.pId}`;
+	    console.log(crawlerUrl);
             listCrawler.queue(crawlerUrl);
             item.cList.forEach((city) => {
                 var cId = city.cId;
