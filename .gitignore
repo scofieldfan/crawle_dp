@@ -2,7 +2,7 @@
 npm-debug.log
 publish.sh
 logs/*
+data/pdf
 nohup.out
 node_modules
-data/
 output/

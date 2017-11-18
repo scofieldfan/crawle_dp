@@ -4,7 +4,6 @@ var File = require('./file');
 var DATETOOL = require('./date');
 var Crawler = require("crawler");
 const superagent = require('superagent');
-require('superagent-proxy')(superagent);
 function getInput() {
     return File.readFile(idFile).split('\n');
 }
@@ -17,6 +16,11 @@ const outputFile =  __dirname +'/../data/all/all-'+getDate()+".csv";
 var detailCrawler = new Crawler({
     maxConnections: 5,
     rateLimit: 2000,
+    headers: {
+        Accept:'text/html,application/xhtml+xml',
+        'User-Agent':'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.87 Mobile Safari/537.36',
+        'Cookie':'_hc.v=f9fb4d55-2e97-af81-4c34-681f72ba2b2e.1480658762; __utma=205923334.1586690983.1494812234.1494812234.1494812234.1; _lxsdk_cuid=15e28434e36c8-08501f21c38d0e-31627c01-fa000-15e28434e37c8; _lxsdk=15e28434e36c8-08501f21c38d0e-31627c01-fa000-15e28434e37c8; aburl=1; cityid=2; PHOENIX_ID=0a48af8e-15fcf85af58-971a64; cye=beijing; _tr.u=ynuWxZKneZ8ZveDJ; cy=2; s_ViewType=10; _lxsdk_s=15fcf8589b7-fb5-d5c-8ab%7C%7C95',
+    },
     callback: function (error, res, done) {
 
         console.log("detail crawler...............");
@@ -27,17 +31,24 @@ var detailCrawler = new Crawler({
             if ($) {
                 var url = res.request.uri.path;
                 var window = {};
+                var navigator = {
+                    userAgent:''
+                }
                 try{
-                    //console.log($("script").eq(8).html());
-                    for(var numberI = 5 ;numberI<15; numberI++){
-			console.log($("script").eq(numberI).html());
+                    console.log('find show_config ......');
+                    for(var numberI = 0 ;numberI<20; numberI++){
                         var scriptHtml = $("script").eq(numberI).html();
-			if(scriptHtml && scriptHtml.indexOf("shop_config")>=0){
-			  var script = eval(scriptHtml);
-			  break;
-			}
+                        console.log(scriptHtml);
+                        if(scriptHtml && scriptHtml.indexOf("shop_config")>0){
+                          var index = scriptHtml.indexOf("shop_config");
+                          scriptHtml = "window.shop_config="+ scriptHtml.substring(index);
+                          var script = eval(scriptHtml);
+                          console.log('shop_config ok......');
+                          console.log(script);
+                          break;
+                        }
                     }
-                    
+
                 }catch(error){
                     console.log('shop_config:' + window.shop_config);
                 }
