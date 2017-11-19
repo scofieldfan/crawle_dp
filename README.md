@@ -8,13 +8,13 @@
 git clone 代码之后,通过npm install 安装成功
 
 ## 项目执行
-执行start_hot.sh 或者 start.sh脚本即可.
+执行start.sh 即可.
 注意start_hot.sh 中的路径需要根据实际情况替换.
 
 
 ## 定期执行
 在linux 下 可将脚本添加到crontab 里进行定期执行
- #0 8 * * *  sh /root/Fan/crawle_dp/start_hot.sh >> /root/Fan/crawle_dp/crontab.log 2>&1
+ #0 8 * * *  sh /root/Fan/crawle_dp/start.sh >> /root/Fan/crawle_dp/crontab.log 2>&1
 
 ## 代码说明
 * bin 目录下为可能用到的一些脚本.
@@ -22,12 +22,12 @@ git clone 代码之后,通过npm install 安装成功
 * stop.sh 是杀掉进程,退出程序
 * trans.sh 将data下的数据从utf-8转码成gbk编码,并且压缩成一个压缩包.excel要求中文文件必须GBK编码.
 * data/ids.txt 为提前生成的所有点评商店的Id.
-* src/allmenus.js //不带浏览器header头的抓取点评目录页的入口
-* src/allmenus_plan_two.js //带浏览器header头的抓取点评目录页的入口.项目使用的是这个版本
-* src/city.js //抓取点评大数据需要用到的城市数据
-* src/file.js //写文件需要的
-* src/hot.js //抓取点评大数据
-* src/merlin.js //抓取merlin需要用的
-* src/testagent.js //抓取merlin需要用的
+* src/allmenus_plan_two.js 抓取大于80元的饭店的详细数据
+* src/city.js 抓取点评大数据需要用到的城市数据
+* src/file.js 写文件需要的
+* src/id.js 生成所有大于80元饭店的id
+* src/hot.js 抓取点评大数据
+* src/merlin.js 抓取merlin需要用的
+* src/testagent.js 抓取merlin需要用的
 * logs 日志目录
 * data 为数据输出目录
